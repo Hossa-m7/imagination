@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مهارة التخيل والإبداع — لعبة تعليمية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#16112b; --bg2:#1f1640; --card:#241a47; --card2:#2c2155;
+  --text:#f5f1ff; --muted:#a89dcc; --border:#3a2f6b;
+  --ajib:#c084fc; --scifi:#22d3ee; --success:#34d399; --danger:#f87171; --warning:#fbbf24;
+  --primary:#a855f7; --accent:#22d3ee;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Tajawal',system-ui,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(168,85,247,.35), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 80% 100%, rgba(34,211,238,.30), transparent 60%),
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:auto,auto,32px 32px,32px 32px;
+  background-attachment:fixed;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{max-width:680px;margin:0 auto;padding:24px 16px}
+.glass{
+  background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+}
+.text-gradient{
+  background:linear-gradient(135deg,#e9b8ff,#9beaff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.row{display:flex;align-items:center;gap:8px}
+.between{display:flex;align-items:center;justify-content:space-between}
+
+/* sound btn */
+.sound-btn{
+  position:fixed;top:16px;left:16px;z-index:40;
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:var(--text);cursor:pointer;font-size:20px;transition:.2s;
+}
+.sound-btn:hover{transform:scale(1.1)}
+
+/* screens */
+.screen{display:none;animation:fadeUp .4s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes floatUp{0%{opacity:1;transform:translate(-50%,0) scale(.9)}100%{opacity:0;transform:translate(-50%,-90px) scale(1.3)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 20px -5px var(--primary)}50%{box-shadow:0 0 40px 0 var(--primary)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(8deg)}75%{transform:rotate(-8deg)}}
+
+/* start */
+.hero{text-align:center;padding:48px 0 16px}
+.hero .emoji{font-size:60px;display:inline-block;animation:wiggle 4s ease-in-out infinite}
+.hero h1{font-size:38px;font-weight:900;margin:12px 0 6px}
+.best-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  padding:6px 14px;border-radius:99px;font-size:14px;margin-top:14px;
+}
+.best-pill i{color:var(--warning)}
+.section-title{font-size:14px;color:var(--muted);font-weight:500;margin-bottom:14px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.level-btn{
+  position:relative;padding:18px 12px;border-radius:14px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);color:var(--text);
+  text-align:center;transition:.25s;font-family:inherit;
+}
+.level-btn:hover{transform:translateY(-4px) scale(1.03)}
+.level-btn i{font-size:30px;display:block;margin-bottom:8px}
+.level-btn h3{font-size:14px;font-weight:700}
+.level-btn p{font-size:11px;color:var(--muted);margin-top:4px}
+.lv-1{background:linear-gradient(135deg, rgba(52,211,153,.3), rgba(20,184,166,.2))}
+.lv-2{background:linear-gradient(135deg, rgba(251,191,36,.3), rgba(249,115,22,.2))}
+.lv-3{background:linear-gradient(135deg, rgba(217,70,239,.3), rgba(168,85,247,.2))}
+
+.realms{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.realm{padding:20px;border-radius:18px;text-align:center;transition:.2s}
+.realm:hover{transform:translateY(-4px)}
+.realm .em{font-size:34px;margin-bottom:8px}
+.realm.ajib{box-shadow:0 0 40px -10px rgba(192,132,252,.6)}
+.realm.scifi{box-shadow:0 0 40px -10px rgba(34,211,238,.6)}
+.realm h3{font-weight:700;margin-bottom:4px}
+.realm p{font-size:12px;color:var(--muted)}
+
+/* quiz */
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  padding:6px 12px;border-radius:99px;font-size:14px;
+}
+.pill .ti-star{color:var(--warning)}
+.streak{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:99px;font-size:14px;
+  background:linear-gradient(90deg, rgba(249,115,22,.3), rgba(239,68,68,.3));
+  border:1px solid rgba(251,146,60,.4);
+  animation:fadeIn .3s;
+}
+.progress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:6px}
+.progress > div{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .5s}
+.timer{height:6px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-bottom:16px}
+.timer > div{height:100%;background:var(--accent);transition:width .9s linear}
+.timer.low > div{background:var(--danger)}
+
+.card{padding:22px;animation:slideIn .35s}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;font-size:12px;
+  padding:4px 10px;border-radius:99px;border:1px solid;margin-bottom:12px;
+}
+.b-ajib{background:rgba(192,132,252,.2);color:#e9b8ff;border-color:rgba(192,132,252,.4)}
+.b-scifi{background:rgba(34,211,238,.2);color:#a5f3fc;border-color:rgba(34,211,238,.4)}
+.b-sort{background:rgba(251,191,36,.2);color:#fde68a;border-color:rgba(251,191,36,.4)}
+.b-classify{background:rgba(129,140,248,.2);color:#c7d2fe;border-color:rgba(129,140,248,.4)}
+
+.q-text{font-size:18px;font-weight:700;line-height:1.7;margin-bottom:18px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  width:100%;text-align:right;padding:14px 16px;border-radius:14px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;display:flex;align-items:center;gap:12px;
+  transition:.2s;font-family:inherit;font-size:15px;
+}
+.opt:hover:not(:disabled){background:rgba(255,255,255,.08);border-color:var(--primary);transform:translateX(-4px)}
+.opt:disabled{cursor:default}
+.opt .num{
+  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);color:var(--muted);font-size:12px;font-weight:700;flex-shrink:0;
+}
+.opt.correct{background:rgba(52,211,153,.2);border-color:var(--success);box-shadow:0 0 30px -8px var(--success)}
+.opt.correct .num{background:var(--success);color:#06281b}
+.opt.wrong{background:rgba(248,113,113,.2);border-color:var(--danger);animation:shake .4s}
+.opt.wrong .num{background:var(--danger);color:#3d0d0d}
+
+.hint-btn{
+  margin-top:14px;font-size:12px;padding:6px 12px;border-radius:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);
+  cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;
+}
+.hint-btn:hover{background:rgba(255,255,255,.08)}
+.hint-box{
+  margin-top:14px;padding:12px 14px;border-radius:12px;font-size:14px;
+  background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);color:#fde68a;
+  display:flex;gap:8px;animation:fadeIn .25s;
+}
+.feedback{
+  margin-top:16px;padding:14px;border-radius:14px;font-size:14px;line-height:1.7;
+  border:1px solid;animation:fadeIn .3s;
+}
+.fb-ok{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);color:#a7f3d0}
+.fb-bad{background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.4);color:#fecaca}
+
+.next-btn{
+  margin-top:16px;width:100%;padding:14px;border-radius:14px;border:none;
+  background:linear-gradient(90deg,var(--primary),var(--accent));color:#1a0a2e;
+  font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  animation:pulseGlow 2s ease-in-out infinite;
+}
+.next-btn:hover{opacity:.9}
+
+/* sort */
+.sort-list{display:flex;flex-direction:column;gap:10px}
+.sort-item{
+  padding:14px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px solid var(--border);cursor:grab;
+  display:flex;align-items:center;gap:12px;transition:.2s;
+}
+.sort-item:hover{background:rgba(255,255,255,.08)}
+.sort-item.dragging{opacity:.5}
+.sort-item.over{border-color:var(--primary);background:rgba(168,85,247,.15)}
+.sort-item.ok{background:rgba(52,211,153,.15);border-color:var(--success)}
+.sort-item.bad{background:rgba(248,113,113,.15);border-color:var(--danger)}
+.sort-item .grip{color:var(--muted);font-size:18px}
+.sort-item .idx{
+  width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;
+}
+.check-btn{
+  margin-top:14px;width:100%;padding:12px;border-radius:12px;
+  background:rgba(168,85,247,.25);border:1px solid var(--primary);color:var(--text);
+  font-weight:700;cursor:pointer;font-family:inherit;font-size:15px;
+}
+.check-btn:hover{background:rgba(168,85,247,.4)}
+
+/* classify */
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.bin{
+  min-height:120px;padding:14px;border-radius:14px;
+  border:2px dashed var(--border);transition:.2s;
+}
+.bin.over{border-color:var(--primary);background:rgba(168,85,247,.1)}
+.bin h4{font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.bin.ajib h4{color:#e9b8ff}
+.bin.scifi h4{color:#a5f3fc}
+.bin .items{display:flex;flex-direction:column;gap:6px;min-height:40px}
+.chip{
+  padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.06);
+  border:1px solid var(--border);font-size:13px;cursor:grab;transition:.15s;
+}
+.chip:hover{background:rgba(255,255,255,.1)}
+.chip.dragging{opacity:.4}
+.chip.ok{background:rgba(52,211,153,.18);border-color:var(--success)}
+.chip.bad{background:rgba(248,113,113,.18);border-color:var(--danger)}
+.pool{
+  margin-top:14px;padding:12px;border-radius:12px;background:rgba(255,255,255,.03);
+  border:1px dashed var(--border);
+}
+.pool .items{display:flex;flex-wrap:wrap;gap:8px;min-height:40px}
+
+/* results */
+.result-hero{text-align:center;padding:30px 0 20px}
+.result-hero .em{font-size:70px}
+.result-hero h2{font-size:30px;font-weight:900;margin-top:10px}
+.score-big{font-size:54px;font-weight:900;margin:10px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.stat{padding:14px;border-radius:14px;text-align:center}
+.stat .v{font-size:24px;font-weight:900}
+.stat .l{font-size:11px;color:var(--muted);margin-top:4px}
+.results-list{margin-top:20px}
+.mini-result{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);margin-bottom:6px;font-size:13px;
+}
+.mini-result .ok{color:var(--success)}
+.mini-result .bad{color:var(--danger)}
+
+.restart-btn{
+  margin-top:20px;width:100%;padding:14px;border-radius:14px;border:none;
+  background:linear-gradient(90deg,var(--primary),var(--accent));color:#1a0a2e;
+  font-weight:700;font-size:16px;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+
+/* floaters */
+.floaters{position:fixed;inset:0;pointer-events:none;z-index:50}
+.floater{
+  position:absolute;top:30%;left:50%;font-size:26px;font-weight:900;
+  background:linear-gradient(135deg,#e9b8ff,#9beaff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:floatUp 1s ease-out forwards;text-shadow:0 0 20px rgba(168,85,247,.5);
+}
+
+@media (max-width:520px){
+  .hero h1{font-size:30px}
+  .levels{grid-template-columns:1fr}
+  .realms{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<button class="sound-btn" id="soundBtn" aria-label="صوت"><i class="ti ti-volume"></i></button>
+<div class="floaters" id="floaters"></div>
+
+<div class="app">
+
+  <!-- START -->
+  <section class="screen active" id="screen-start">
+    <div class="hero">
+      <span class="emoji">✨</span>
+      <h1 class="text-gradient">مهارة التخيل والإبداع</h1>
+      <p class="muted">الحكاية العجيبة وقصة الخيال العلمي · الثالثة إعدادي</p>
+      <div id="bestPill"></div>
+    </div>
+    <div class="glass" style="padding:20px">
+      <p class="section-title">اختر مستوى اللعبة</p>
+      <div class="levels">
+        <button class="level-btn lv-1" data-lv="1"><i class="ti ti-seedling"></i><h3>مبتدئ</h3><p>اختيار من متعدد</p></button>
+        <button class="level-btn lv-2" data-lv="2"><i class="ti ti-bolt"></i><h3>متوسط</h3><p>تصنيف وترتيب</p></button>
+        <button class="level-btn lv-3" data-lv="3"><i class="ti ti-trophy"></i><h3>متقدم</h3><p>كل المستويات</p></button>
+      </div>
+    </div>
+    <div class="realms">
+      <div class="realm ajib glass"><div class="em">🪄</div><h3>الحكاية العجيبة</h3><p>أحداث خارقة وشخصيات لا تخضع للمنطق</p></div>
+      <div class="realm scifi glass"><div class="em">🚀</div><h3>الخيال العلمي</h3><p>متخيل يرتبط بالعلم والمستقبل</p></div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="screen-quiz">
+    <div class="top-bar">
+      <div class="row">
+        <span class="pill"><i class="ti ti-star"></i><span id="score">0</span></span>
+        <span id="streakPill"></span>
+      </div>
+      <div class="muted" style="font-size:14px">سؤال <b id="qIdx" style="color:var(--text)">1</b> / <span id="qTotal">10</span></div>
+    </div>
+    <div class="progress"><div id="progressBar" style="width:0"></div></div>
+    <div class="timer" id="timerWrap"><div id="timerBar" style="width:100%"></div></div>
+    <div class="glass card" id="qHost"></div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="screen-results">
+    <div class="result-hero">
+      <div class="em" id="resEmoji">🎉</div>
+      <h2 id="resTitle">نتيجة رائعة!</h2>
+      <div class="score-big text-gradient" id="resScore">0</div>
+      <p class="muted" id="resSub">من أصل 0 نقطة</p>
+    </div>
+    <div class="stats">
+      <div class="stat glass"><div class="v" id="stRight">0</div><div class="l">إجابات صحيحة</div></div>
+      <div class="stat glass"><div class="v" id="stStreak">0</div><div class="l">أطول سلسلة 🔥</div></div>
+      <div class="stat glass"><div class="v" id="stBest">0</div><div class="l">أفضل نتيجة</div></div>
+    </div>
+    <div class="glass" style="padding:16px;margin-top:18px">
+      <p class="section-title">تفاصيل الإجابات</p>
+      <div class="results-list" id="resList"></div>
+    </div>
+    <button class="restart-btn" id="restartBtn"><i class="ti ti-refresh"></i> العب مرة أخرى</button>
+  </section>
+</div>
+
+<script>
+/* ============== DATA ============== */
+const ALL = [
+  {type:'mcq',badge:'ajib',q:'ما العنصر الذي يجعل النص "حكاية عجيبة"؟',opts:["أحداث قابلة للتفسير العلمي","شخصيات عادية ووقائع يومية","أحداث خارقة وشخصيات لا تخضع للمنطق","زمان ومكان محددان بدقة"],correct:2,hint:"الحكاية العجيبة تقوم على الخارق.",fb:"الحكاية العجيبة تقوم على حدث خارق لا يقبل تفسيرا طبيعيا."},
+  {type:'mcq',badge:'ajib',q:'ما التحول الخارق في حكاية "الشيطان الذي تحول إلى كرة"؟',opts:["الشيطان يطير في السماء","الشيطان يختزل نفسه إلى كرة ويتدحرج","الشيطان يختفي بشكل مفاجئ","الشيطان يتحول إلى إنسان"],correct:1,hint:"انظر إلى عنوان القصة.",fb:"التحول المركزي هو اختزال الشيطان نفسه إلى كرة."},
+  {type:'mcq',badge:'scifi',q:'في قصة "المركبة الفضائية المنبوذة"، ما اسم رائد الفضاء الأخير؟',opts:["الكولونيل سعيد","بلال","حسام","الكولونيل أحمد"],correct:0,hint:"ذُكر في المقطع الأول.",fb:"رائد الفضاء الأخير هو الكولونيل سعيد."},
+  {type:'mcq',badge:'scifi',q:"ما الذي يميز قصة الخيال العلمي عن الحكاية العجيبة؟",opts:["تقوم على أحداث خارقة لا تفسير لها","ترتبط بالعلم أو المستقبل","تستعمل شخصيات من الجان","تقع في مكان غامض"],correct:1,hint:'فكر في كلمة "العلمي".',fb:"قصة الخيال العلمي تقوم على متخيل يمكن ربطه بالعلم أو المستقبل."},
+  {type:'mcq',badge:'ajib',q:"في حكاية الشيطان، ما المشكلة التي افتتحت بها القصة؟",opts:["حرب بين القائد والشيطان","القائد محكوم عليه بالعطش المؤبد","الشيطان يختبئ في المدينة","الشيطان يسرق طعام القائد"],correct:1,hint:"المقطع الأول من الحكاية.",fb:"حكم الشيطان على قائد بالعطش المؤبد."},
+  {type:'mcq',badge:'ajib',q:"هل الزمان والمكان في الحكاية العجيبة محددان بدقة؟",opts:["نعم، دائما محددان بدقة","لا، الزمان والمكان غامضان","الزمان محدد والمكان غامض","المكان محدد والزمان غامض"],correct:1,hint:"خصائص الحكاية العجيبة.",fb:"الزمان والمكان غامضان، وهذا يخدم طابعها الخارق."},
+  {type:'mcq',badge:'scifi',q:'ما المؤشر العلمي في "المركبة الفضائية المنبوذة"؟',opts:["وجود جان وأرواح في الفضاء","مركبة فضائية ومركز مراقبة أرضي","قائد يعاني من العطش المؤبد","شيطان يتحول إلى كرة"],correct:1,hint:"ما الذي يرتبط بالعلم؟",fb:"مركبة فضائية، محطة تجارب، مركز مراقبة، رائد فضاء."},
+  {type:'mcq',badge:'ajib',q:"كيف انتهت حكاية الشيطان الذي تحول إلى كرة؟",opts:["استسلم وبقي في المدينة","قتله الناس","غادر المدينة","انتصر القائد عليه"],correct:2,hint:"المقطع الأخير.",fb:"غادر الشيطان المدينة بعد أن طارده السكان."},
+  {type:'sort',q:'رتب أحداث قصة "بلال والأوموغلوبين":',items:["بلال يصنع الأوموغلوبين بديلا عن الهيموغلوبين","اقتراح حقن الدم الجديد في عروق المرضى","رفض الطبيب، لكن حسام اقترح التجربة","ينجح بلال في إنقاذ حسام لكن لونه يصبح أزرق"],correctOrder:[0,1,2,3],hint:"المشكل ← الحل ← التجربة ← النتيجة."},
+  {type:'classify',q:"صنف العناصر التالية (حكاية عجيبة أم خيال علمي):",items:[
+    {text:"شيطان يتحول إلى كرة",cat:"ajib"},
+    {text:"مركبة فضائية تحمل رائد فضاء",cat:"scifi"},
+    {text:"ملك المرجان وجنوده",cat:"ajib"},
+    {text:"تجارب علمية في الفضاء",cat:"scifi"},
+    {text:"الجان الأزرق في قاع البحر",cat:"ajib"},
+    {text:"كائنات فضائية في كوكب المريخ",cat:"scifi"},
+  ],hint:"عجيبة = خارق بلا تفسير؛ علمي = مرتبط بالعلم."},
+];
+
+/* ============== SOUND ============== */
+let actx=null, soundOn=true;
+const ctx=()=>actx||(actx=new (window.AudioContext||window.webkitAudioContext)());
+function tone(f,d,t='sine',v=.18,when=0){
+  if(!soundOn)return;
+  try{const c=ctx(),T=c.currentTime+when,o=c.createOscillator(),g=c.createGain();
+  o.type=t;o.frequency.setValueAtTime(f,T);
+  g.gain.setValueAtTime(0,T);g.gain.linearRampToValueAtTime(v,T+.01);g.gain.exponentialRampToValueAtTime(.0001,T+d);
+  o.connect(g).connect(c.destination);o.start(T);o.stop(T+d);}catch(e){}
+}
+const sfx={
+  correct(){tone(523,.12,'triangle');tone(659,.12,'triangle',.18,.08);tone(784,.22,'triangle',.2,.16);},
+  wrong(){tone(220,.18,'sawtooth',.12);tone(180,.28,'sawtooth',.12,.1);},
+  click(){tone(420,.06,'square',.06);},
+  tick(){tone(900,.04,'square',.04);},
+  pop(){tone(660,.08,'sine',.10);},
+  win(){[523,659,784,1046].forEach((f,i)=>tone(f,.25,'triangle',.2,i*.12));},
+};
+
+/* ============== STATE ============== */
+const STORAGE_KEY='imagination-quiz-best';
+const QTIME=30;
+function safeGet(key){try{return localStorage.getItem(key);}catch(e){return null;}}
+function safeSet(key,val){try{localStorage.setItem(key,val);}catch(e){}}
+let state={qs:[],idx:0,score:0,streak:0,bestStreak:0,results:[],best:+(safeGet(STORAGE_KEY)||0),answered:false,timeLeft:QTIME,timerId:null,showHint:false};
+
+const $=id=>document.getElementById(id);
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+
+/* ============== SCREENS ============== */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $('screen-'+id).classList.add('active');
+}
+
+/* ============== FLOATER ============== */
+function floater(txt){
+  const el=document.createElement('div');
+  el.className='floater';el.textContent=txt;
+  $('floaters').appendChild(el);
+  setTimeout(()=>el.remove(),1000);
+}
+
+/* ============== START ============== */
+function renderBest(){
+  $('bestPill').innerHTML = state.best>0
+    ? `<div class="best-pill"><i class="ti ti-medal"></i> أفضل نتيجة: <b>${state.best}</b></div>` : '';
+}
+document.querySelectorAll('.level-btn').forEach(b=>{
+  b.onclick=()=>{sfx.click();startGame(+b.dataset.lv);};
+});
+
+function startGame(lv){
+  let pool;
+  if(lv===1)pool=ALL.filter(q=>q.type==='mcq');
+  else if(lv===2)pool=ALL.filter(q=>q.type==='sort'||q.type==='classify');
+  else pool=ALL;
+  state.qs=shuffle(pool);
+  state.idx=0;state.score=0;state.streak=0;state.bestStreak=0;state.results=[];
+  show('quiz');
+  $('qTotal').textContent=state.qs.length;
+  renderQuestion();
+}
+
+/* ============== TIMER ============== */
+function startTimer(){
+  state.timeLeft=QTIME;
+  updateTimer();
+  clearInterval(state.timerId);
+  state.timerId=setInterval(()=>{
+    state.timeLeft--;
+    if(state.timeLeft<=5&&state.timeLeft>0)sfx.tick();
+    updateTimer();
+    if(state.timeLeft<=0){
+      clearInterval(state.timerId);
+      if(!state.answered){state.answered=true;onAnswer(false,0,getLabel(state.qs[state.idx]));revealCurrent();}
+    }
+  },1000);
+}
+function updateTimer(){
+  const w=$('timerWrap');
+  w.classList.toggle('low',state.timeLeft<=5);
+  $('timerBar').style.width=(state.timeLeft/QTIME*100)+'%';
+}
+
+/* ============== QUESTION RENDER ============== */
+function getLabel(q){return q.type==='mcq'?q.q:q.type==='sort'?'ترتيب الأحداث':'تصنيف العناصر';}
+
+function renderQuestion(){
+  state.answered=false;state.showHint=false;
+  $('score').textContent=state.score;
+  $('qIdx').textContent=state.idx+1;
+  $('progressBar').style.width=((state.idx)/state.qs.length*100)+'%';
+  $('streakPill').innerHTML = state.streak>=2 ? `<span class="streak">🔥 <b>${state.streak}</b></span>` : '';
+  const q=state.qs[state.idx];
+  if(q.type==='mcq')renderMCQ(q);
+  else if(q.type==='sort')renderSort(q);
+  else renderClassify(q);
+  startTimer();
+}
+
+function badge(kind){
+  const map={ajib:['b-ajib','ti-wand','حكاية عجيبة'],scifi:['b-scifi','ti-rocket','خيال علمي'],sort:['b-sort','ti-arrows-sort','ترتيب'],classify:['b-classify','ti-category','تصنيف']};
+  const [cls,icon,label]=map[kind];
+  return `<span class="badge ${cls}"><i class="ti ${icon}"></i> ${label}</span>`;
+}
+function hintHTML(hint){
+  return `<div id="hintArea">
+    <button class="hint-btn" id="hintBtn"><i class="ti ti-bulb"></i> طلب مساعدة</button>
+  </div>`;
+}
+function bindHint(hint){
+  const btn=$('hintBtn');if(!btn)return;
+  btn.onclick=()=>{
+    sfx.click();state.showHint=true;
+    $('hintArea').innerHTML=`<div class="hint-box"><i class="ti ti-bulb" style="color:var(--warning)"></i><span>${hint}</span></div>`;
+  };
+}
+function feedbackHTML(ok,text){
+  return `<div class="feedback ${ok?'fb-ok':'fb-bad'}"><i class="ti ${ok?'ti-check':'ti-info-circle'}"></i> ${text}</div>`;
+}
+function nextBtnHTML(){
+  return `<button class="next-btn" id="nextBtn">السؤال التالي <i class="ti ti-arrow-left"></i></button>`;
+}
+function bindNext(){
+  $('nextBtn').onclick=()=>{
+    sfx.click();
+    clearInterval(state.timerId);
+    if(state.idx+1>=state.qs.length)finish();
+    else{state.idx++;renderQuestion();}
+  };
+}
+
+/* ---- MCQ ---- */
+function renderMCQ(q){
+  const ar=['أ','ب','ج','د'];
+  $('qHost').innerHTML = badge(q.badge)
+    + `<h2 class="q-text">${q.q}</h2>`
+    + `<div class="opts">${q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="num">${ar[i]}</span><span>${o}</span></button>`).join('')}</div>`
+    + hintHTML(q.hint);
+  bindHint(q.hint);
+  $('qHost').querySelectorAll('.opt').forEach(b=>{
+    b.onclick=()=>{
+      if(state.answered)return;
+      const i=+b.dataset.i;
+      sfx.pop();
+      state.answered=true;clearInterval(state.timerId);
+      const ok=i===q.correct;
+      $('qHost').querySelectorAll('.opt').forEach((el,j)=>{
+        el.disabled=true;
+        if(j===q.correct)el.classList.add('correct');
+        else if(j===i)el.classList.add('wrong');
+      });
+      onAnswer(ok, ok?(state.showHint?7:10):0, q.q);
+      const hostExtra = document.createElement('div');
+      hostExtra.innerHTML = feedbackHTML(ok,q.fb)+nextBtnHTML();
+      $('qHost').appendChild(hostExtra);
+      bindNext();
+    };
+  });
+}
+
+/* ---- SORT (drag and drop) ---- */
+function renderSort(q){
+  const initial = shuffle(q.items.map((t,i)=>({text:t,orig:i})));
+  state.sort = initial;
+  $('qHost').innerHTML = badge('sort')
+    + `<h2 class="q-text">${q.q}</h2>`
+    + `<div class="sort-list" id="sortList">${initial.map((it,k)=>sortItemHTML(it,k)).join('')}</div>`
+    + `<button class="check-btn" id="checkBtn">تأكيد الترتيب</button>`
+    + hintHTML(q.hint);
+  bindHint(q.hint);
+  bindSortDnd();
+  $('checkBtn').onclick=()=>{
+    if(state.answered)return;
+    state.answered=true;clearInterval(state.timerId);
+    const correctTexts = q.correctOrder.map(i=>q.items[i]);
+    let right=0;
+    document.querySelectorAll('#sortList .sort-item').forEach((el,k)=>{
+      const txt = state.sort[k].text;
+      const ok = txt===correctTexts[k];
+      el.classList.add(ok?'ok':'bad');
+      if(ok)right++;
+    });
+    const allOk = right===q.items.length;
+    const gained = Math.round((right/q.items.length)*10) * (state.showHint?0.7:1);
+    onAnswer(allOk, Math.round(gained), 'ترتيب الأحداث', right);
+    $('checkBtn').remove();
+    const extra = document.createElement('div');
+    extra.innerHTML = feedbackHTML(allOk, `${right}/${q.items.length} في المكان الصحيح.`)+nextBtnHTML();
+    $('qHost').appendChild(extra);
+    bindNext();
+  };
+}
+function sortItemHTML(it,k){
+  return `<div class="sort-item" draggable="true" data-k="${k}"><i class="ti ti-grip-vertical grip"></i><span class="idx">${k+1}</span><span>${it.text}</span></div>`;
+}
+function bindSortDnd(){
+  const list=$('sortList');
+  let dragK=null;
+  list.querySelectorAll('.sort-item').forEach(el=>{
+    el.ondragstart=e=>{dragK=+el.dataset.k;el.classList.add('dragging');e.dataTransfer.effectAllowed='move';};
+    el.ondragend=()=>{el.classList.remove('dragging');list.querySelectorAll('.sort-item').forEach(x=>x.classList.remove('over'));};
+    el.ondragover=e=>{e.preventDefault();el.classList.add('over');};
+    el.ondragleave=()=>el.classList.remove('over');
+    el.ondrop=e=>{
+      e.preventDefault();
+      const dropK=+el.dataset.k;
+      if(dragK===null||dragK===dropK)return;
+      const arr=state.sort;
+      const [moved]=arr.splice(dragK,1);
+      arr.splice(dropK,0,moved);
+      // re-render list only
+      list.innerHTML = arr.map((it,k)=>sortItemHTML(it,k)).join('');
+      bindSortDnd();
+      sfx.click();
+    };
+  });
+}
+
+/* ---- CLASSIFY (drag to bins) ---- */
+function renderClassify(q){
+  state.classify = {pool: shuffle(q.items.map((it,i)=>({...it,id:i}))), ajib:[], scifi:[]};
+  $('qHost').innerHTML = badge('classify')
+    + `<h2 class="q-text">${q.q}</h2>`
+    + `<div class="bins">
+        <div class="bin ajib" data-bin="ajib"><h4>🪄 حكاية عجيبة</h4><div class="items" data-bin-items="ajib"></div></div>
+        <div class="bin scifi" data-bin="scifi"><h4>🚀 خيال علمي</h4><div class="items" data-bin-items="scifi"></div></div>
+      </div>
+      <div class="pool"><p class="muted" style="font-size:12px;margin-bottom:8px">اسحب العناصر إلى المجموعة المناسبة:</p><div class="items" id="pool"></div></div>
+      <button class="check-btn" id="checkBtn">تأكيد التصنيف</button>`
+    + hintHTML(q.hint);
+  bindHint(q.hint);
+  renderClassifyChips();
+  bindClassifyDnd();
+  $('checkBtn').onclick=()=>{
+    if(state.answered)return;
+    if(state.classify.pool.length>0){floater('صنف الكل أولا');return;}
+    state.answered=true;clearInterval(state.timerId);
+    let right=0;const total=q.items.length;
+    ['ajib','scifi'].forEach(cat=>{
+      state.classify[cat].forEach(it=>{
+        const ok = it.cat===cat;
+        if(ok)right++;
+      });
+    });
+    document.querySelectorAll('.chip').forEach(c=>{
+      const id=+c.dataset.id;const inBin=c.closest('[data-bin-items]');
+      if(!inBin)return;
+      const cat=inBin.dataset.binItems;
+      const it=q.items[id];
+      c.classList.add(it.cat===cat?'ok':'bad');
+    });
+    const allOk = right===total;
+    const gained = Math.round((right/total)*10) * (state.showHint?0.7:1);
+    onAnswer(allOk, Math.round(gained), 'تصنيف العناصر', right);
+    $('checkBtn').remove();
+    const extra=document.createElement('div');
+    extra.innerHTML = feedbackHTML(allOk, `${right}/${total} تصنيف صحيح.`)+nextBtnHTML();
+    $('qHost').appendChild(extra);
+    bindNext();
+  };
+}
+function renderClassifyChips(){
+  $('pool').innerHTML = state.classify.pool.map(it=>chipHTML(it)).join('');
+  ['ajib','scifi'].forEach(b=>{
+    document.querySelector(`[data-bin-items="${b}"]`).innerHTML = state.classify[b].map(it=>chipHTML(it)).join('');
+  });
+  bindClassifyDnd();
+}
+function chipHTML(it){return `<div class="chip" draggable="true" data-id="${it.id}">${it.text}</div>`;}
+
+function bindClassifyDnd(){
+  let dragId=null, fromZone=null;
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.ondragstart=e=>{
+      if(state.answered){e.preventDefault();return;}
+      dragId=+c.dataset.id;c.classList.add('dragging');
+      const parent=c.closest('[data-bin-items]');
+      fromZone = parent ? parent.dataset.binItems : 'pool';
+      e.dataTransfer.effectAllowed='move';
+    };
+    c.ondragend=()=>c.classList.remove('dragging');
+  });
+  const zones = [...document.querySelectorAll('[data-bin-items]'), $('pool')];
+  zones.forEach(z=>{
+    const bin = z.closest('.bin');
+    z.ondragover=e=>{e.preventDefault();if(bin)bin.classList.add('over');};
+    z.ondragleave=()=>{if(bin)bin.classList.remove('over');};
+    z.ondrop=e=>{
+      e.preventDefault();if(bin)bin.classList.remove('over');
+      if(dragId===null||state.answered)return;
+      const targetZone = z===$('pool')?'pool':z.dataset.binItems;
+      if(targetZone===fromZone)return;
+      // find & move
+      let item=null;
+      ['pool','ajib','scifi'].forEach(k=>{
+        const idx=state.classify[k].findIndex(x=>x.id===dragId);
+        if(idx>=0){item=state.classify[k].splice(idx,1)[0];}
+      });
+      if(item){state.classify[targetZone].push(item);sfx.pop();}
+      renderClassifyChips();
+      dragId=null;
+    };
+  });
+}
+
+/* ============== ANSWER / FINISH ============== */
+function onAnswer(ok,gained,label,partial){
+  if(ok){
+    sfx.correct();
+    state.streak++;
+    const bonus = state.streak>=3 ? Math.floor(gained*.5) : 0;
+    const total = gained+bonus;
+    state.score+=total;
+    state.bestStreak=Math.max(state.bestStreak,state.streak);
+    floater(`+${total}${bonus?' 🔥':''}`);
+  }else{
+    sfx.wrong();state.streak=0;
+    if(gained>0){state.score+=gained;floater(`+${gained}`);}
+  }
+  $('score').textContent=state.score;
+  state.results.push({correct:ok,q:label,partial});
+}
+function revealCurrent(){
+  // when time runs out without answer — disable interactive
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  const extra=document.createElement('div');
+  extra.innerHTML = feedbackHTML(false,'انتهى الوقت!')+nextBtnHTML();
+  $('qHost').appendChild(extra);
+  bindNext();
+}
+
+function finish(){
+  sfx.win();
+  show('results');
+  if(state.score>state.best){state.best=state.score;safeSet(STORAGE_KEY,String(state.best));}
+  const max=state.qs.length*10;
+  $('resScore').textContent=state.score;
+  $('resSub').textContent=`من أصل ${max} نقطة`;
+  const right=state.results.filter(r=>r.correct).length;
+  $('stRight').textContent=`${right}/${state.results.length}`;
+  $('stStreak').textContent=state.bestStreak;
+  $('stBest').textContent=state.best;
+  const pct=state.score/max;
+  $('resEmoji').textContent = pct>=.8?'🏆':pct>=.5?'🎉':'💪';
+  $('resTitle').textContent = pct>=.8?'أداء استثنائي!':pct>=.5?'نتيجة جيدة!':'حاول مرة أخرى!';
+  $('resList').innerHTML = state.results.map((r,i)=>`
+    <div class="mini-result">
+      <span class="muted">${i+1}. ${r.q.length>50?r.q.slice(0,50)+'...':r.q}</span>
+      <span class="${r.correct?'ok':'bad'}"><i class="ti ti-${r.correct?'check':'x'}"></i></span>
+    </div>`).join('');
+  renderBest();
+}
+
+$('restartBtn').onclick=()=>{sfx.click();show('start');renderBest();};
+
+$('soundBtn').onclick=()=>{
+  soundOn=!soundOn;
+  $('soundBtn').innerHTML=`<i class="ti ti-${soundOn?'volume':'volume-off'}"></i>`;
+  if(soundOn)sfx.click();
+};
+
+renderBest();
+</script>
+</body>
+</html>
